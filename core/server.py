@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from api import api_router
 from core.config.app import AppConfig
+from database.connection import initiate_database, create_unique_index
 
 
 def init_routers(app_: FastAPI) -> None:
@@ -33,3 +34,9 @@ def create_app() -> FastAPI:
 
 
 app = create_app()
+
+
+@app.on_event("startup")
+async def start_database():
+    await initiate_database()
+    await create_unique_index()

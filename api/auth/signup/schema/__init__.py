@@ -1,4 +1,4 @@
-from .request import UserSignupRequestSchema
+from .request import UserCreateSchema
 from .response import UserResponseSchema
 
-__all__ = ["UserSignupRequestSchema", "UserResponseSchema"]
+__all__ = ["UserCreateSchema", "UserResponseSchema"]

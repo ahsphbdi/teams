@@ -1,7 +1,10 @@
 from fastapi import APIRouter, status
-from .schema import UserResponseSchema, UserSignupRequestSchema
+from .schema import UserResponseSchema, UserCreateSchema
+from .controller import SignUpController
+from database.model import User
 
-router = APIRouter(tags=["Register"])
+signup_controller = SignUpController(User)
+router = APIRouter(tags=["Signup"])
 
 
 @router.post(
@@ -10,10 +13,5 @@ router = APIRouter(tags=["Register"])
     response_model=UserResponseSchema,
     summary="Return user information",
 )
-async def signup(body: UserSignupRequestSchema):
-    return {
-        "age": body.age,
-        "name": body.name,
-        "last_name": body.last_name,
-        "email": body.email,
-    }
+async def signup(body: UserCreateSchema):
+    return await signup_controller.create(body)

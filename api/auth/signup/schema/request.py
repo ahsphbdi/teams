@@ -4,13 +4,12 @@ from pydantic import (
     constr,
     EmailStr,
     root_validator,
-    field_validator,
     validator,
 )
-from fastapi.exceptions import ValidationException
 
 
-class UserSignupRequestSchema(BaseModel):
+class UserCreateSchema(BaseModel):
+    # id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
     age: int
     name: constr(min_length=3, max_length=255)
     last_name: constr(min_length=3, max_length=255)
@@ -24,10 +23,13 @@ class UserSignupRequestSchema(BaseModel):
                 "name": "amir",
                 "last_name": "espahbodi",
                 "email": "ah.espahbodi@gmail.com",
-                "password1": "secret-12",
-                "password2": "secret-12",
+                "password1": "Secret-12",
+                "password2": "Secret-12",
             }
-        }
+        },
+        # allow_population_by_field_name=True,
+        arbitrary_types_allowed=True,
+        # json_encoders={PyObjectId: str},
     )
 
     @validator("password1", "password2")
