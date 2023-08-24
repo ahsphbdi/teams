@@ -1,11 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from api import router
+from api import api_router
 from core.config.app import AppConfig
 
 
 def init_routers(app_: FastAPI) -> None:
-    app_.include_router(router)
+    app_.include_router(api_router)
 
 
 def init_cors(app_: FastAPI) -> None:
