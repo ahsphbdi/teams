@@ -17,7 +17,7 @@ class SignUpController:
             )
             is not None
         )
-        if user_exists is not None:
+        if user_exists:
             raise HTTPException(
                 detail="user with this email or username address alredy registered",
                 status_code=status.HTTP_400_BAD_REQUEST,
