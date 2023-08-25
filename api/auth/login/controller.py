@@ -1,6 +1,8 @@
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.exceptions import HTTPException
 from core.security.password import verify_password
+from core.security.jwt import create_access_token
+from core.config.jwt import JwtConfig
 from database.connection import users_collection
 
 
@@ -15,4 +17,7 @@ class LoginController:
             raise HTTPException(
                 status_code=400, detail="Incorrect username or password"
             )
-        return True
+        return {
+            "access_token": create_access_token(data={"sub": user["username"]}),
+            "expire": {"minutes": JwtConfig.ACCESS_TOKEN_EXPIRE_MINUTES},
+        }
