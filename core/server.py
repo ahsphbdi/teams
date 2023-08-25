@@ -38,5 +38,6 @@ app = create_app()
 
 @app.on_event("startup")
 async def start_database():
-    await initiate_database()
-    await create_unique_index()
+    pass
+    # await initiate_database()
+    # await create_unique_index()

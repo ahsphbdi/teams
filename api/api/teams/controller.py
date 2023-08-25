@@ -57,3 +57,41 @@ class TeamsController:
             raise HTTPException(status_code=500, detail="error acured")
         elif result.modified_count >= 1:
             raise HTTPException(status_code=404, detail="not found")
+
+    @staticmethod
+    async def task():
+        teams_collection
+        pipeline = [
+            {
+                "$lookup": {
+                    "from": "users",
+                    "localField": "members",
+                    "foreignField": "_id",
+                    "as": "members",
+                }
+            },
+            {"$unwind": "$members"},
+            {"$sort": {"members.age": 1}},
+            {
+                "$project": {
+                    "_id": 1,
+                    "title": 1,
+                    "members.age": 1,
+                    "members.name": 1,
+                    "members.username": 1,
+                    "members.email": 1,
+                }
+            },
+        ]
+
+        teams = {}
+        async with teams_collection.aggregate(pipeline) as cursor:
+            async for team in cursor:
+                if str(team["_id"]) not in teams:
+                    teams[str(team["_id"])] = {
+                        "title": team["title"],
+                        "members": [team["members"]],
+                    }
+                else:
+                    teams[str(team["_id"])]["members"].append(team["members"])
+        return teams.values()

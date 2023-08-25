@@ -1,5 +1,5 @@
 from .request import TeamCreateSchema, TeamUpdateScema
-from .response import TeamResponseSchema, TeamListResponseSchema
+from .response import TeamResponseSchema, TeamListResponseSchema, TaskTeamResponseSchema
 
 
 __all__ = [
@@ -7,4 +7,5 @@ __all__ = [
     "TeamUpdateScema",
     "TeamResponseSchema",
     "TeamListResponseSchema",
+    "TaskTeamResponseSchema",
 ]

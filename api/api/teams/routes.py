@@ -8,6 +8,7 @@ from .schema import (
     TeamResponseSchema,
     TeamUpdateScema,
     TeamListResponseSchema,
+    TaskTeamResponseSchema,
 )
 
 
@@ -80,3 +81,12 @@ async def join_on_team(
     current_user: Annotated[User, Depends(get_current_user)], t_id: Annotated[str, ...]
 ):
     return await teams_controller.join_on_team(t_id, current_user)
+
+
+@router.post(
+    "/task/",
+    response_model=list[TaskTeamResponseSchema],
+    summary="admin user can get teams with members",
+)
+async def join_on_team(current_user: Annotated[User, Depends(get_admin_user)]):
+    return await teams_controller.task()
