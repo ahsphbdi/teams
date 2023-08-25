@@ -75,7 +75,7 @@ async def delete_team(
 
 
 @router.post(
-    "{t_id}/join/", response_model=None, summary="authenticated user can join  on tams"
+    "/{t_id}/join/", response_model=None, summary="authenticated user can join  on tams"
 )
 async def join_on_team(
     current_user: Annotated[User, Depends(get_current_user)], t_id: Annotated[str, ...]
