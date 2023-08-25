@@ -78,8 +78,8 @@ class TeamsController:
                     "title": 1,
                     "members.age": 1,
                     "members.name": 1,
-                    "members.username": 1,
-                    "members.email": 1,
+                    # "members.username": 1,
+                    # "members.email": 1,
                 }
             },
         ]

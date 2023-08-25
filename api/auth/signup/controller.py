@@ -11,6 +11,17 @@ from .schema import UserCreateSchema
 class SignUpController:
     @classmethod
     async def create(cls, body: UserCreateSchema):
+        user_exists = (
+            await users_collection.find_one(
+                {"$or": [{"username": body.username}, {"email": body.email}]}
+            )
+            is not None
+        )
+        if user_exists is not None:
+            raise HTTPException(
+                detail="user with this email or username address alredy registered",
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
         hashed_password = get_password_hash(body.password1)
         user_data = jsonable_encoder(
             {
@@ -23,13 +34,7 @@ class SignUpController:
                 "role": UserRole.NORMAL,
             }
         )
-        try:
-            await users_collection.insert_one(user_data)
-        except DuplicateKeyError:
-            raise HTTPException(
-                detail="user with this email or username address alredy registered",
-                status_code=status.HTTP_400_BAD_REQUEST,
-            )
+        await users_collection.insert_one(user_data)
         return {
             "age": body.age,
             "name": body.name,
