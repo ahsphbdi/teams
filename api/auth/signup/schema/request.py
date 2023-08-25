@@ -5,6 +5,7 @@ from pydantic import (
     EmailStr,
     root_validator,
     validator,
+    Field,
 )
 
 
@@ -13,6 +14,7 @@ class UserCreateSchema(BaseModel):
     age: int
     name: constr(min_length=3, max_length=255)
     last_name: constr(min_length=3, max_length=255)
+    username: constr(min_length=3, max_length=50)  # , pattern="[a-zA-Z0-9_]*")
     email: EmailStr
     password1: constr(min_length=8)
     password2: constr(min_length=8)
@@ -22,6 +24,7 @@ class UserCreateSchema(BaseModel):
                 "age": 24,
                 "name": "amir",
                 "last_name": "espahbodi",
+                "username": "amir",
                 "email": "ah.espahbodi@gmail.com",
                 "password1": "Secret-12",
                 "password2": "Secret-12",
@@ -55,7 +58,6 @@ class UserCreateSchema(BaseModel):
                     "password must contain lower and upper case character and number and one ore more other"
                 ]
             )
-
         return value
 
     @root_validator(pre=True)

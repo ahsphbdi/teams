@@ -1,9 +1,8 @@
 from fastapi import APIRouter, status
 from .schema import UserResponseSchema, UserCreateSchema
-from .controller import SignUpController
+from .controller import SignUpController as signup_controller
 from database.model import User
 
-signup_controller = SignUpController(User)
 router = APIRouter(tags=["Signup"])
 
 

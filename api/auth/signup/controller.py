@@ -9,18 +9,18 @@ from .schema import UserCreateSchema
 
 
 class SignUpController:
-    def __init__(self, model):
-        self.model = model
-
-    async def create(self, body: UserCreateSchema):
+    @classmethod
+    async def create(body: UserCreateSchema):
         hashed_password = get_password_hash(body.password1)
         user_data = jsonable_encoder(
             {
                 "age": body.age,
                 "name": body.name,
+                "username": body.username,
                 "last_name": body.last_name,
                 "email": body.email,
                 "hashed_password": hashed_password,
+                "role": 3,
             }
         )
         try:
@@ -33,6 +33,8 @@ class SignUpController:
         return {
             "age": body.age,
             "name": body.name,
+            "username": body.username,
             "last_name": body.last_name,
             "email": body.email,
+            "role": 3,
         }

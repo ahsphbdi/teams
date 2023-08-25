@@ -11,8 +11,8 @@ teams_collection = database.teams
 
 
 async def create_unique_index():
-    index_field = "email"
-    unique_index = await users_collection.create_index([(index_field, 1)], unique=True)
+    unique_index = await users_collection.create_index([("usernaem", 1)], unique=True)
+    unique_index = await users_collection.create_index([("email", 1)], unique=True)
 
 
 async def initiate_database():
