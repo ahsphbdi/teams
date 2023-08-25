@@ -1,12 +1,13 @@
 from pydantic import BaseModel, ConfigDict, Field
-from core.schema.py_objectid import PyObjectId
+from bson import ObjectId
 
 
 class TeamResponseSchema(BaseModel):
-    id: str = Field(
-        validation_alias="_id"
-    )  # = Field(default_factory=PyObjectId, alias="_id")
+    id: ObjectId = Field(validation_alias="_id")
     title: str
+    members: list[ObjectId]
     model_config = ConfigDict(
         arbitrary_types_allowed=True,
+        populate_by_name=True,
+        json_encoders={ObjectId: str},
     )

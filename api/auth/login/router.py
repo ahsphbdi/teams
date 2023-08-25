@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from .controller import LoginController as login_controller
 
-router = APIRouter(tags=["Login"])
+router = APIRouter()
 
 
 @router.post("/login/")

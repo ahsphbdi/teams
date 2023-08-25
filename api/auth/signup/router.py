@@ -3,7 +3,7 @@ from .schema import UserResponseSchema, UserCreateSchema
 from .controller import SignUpController as signup_controller
 from database.model import User
 
-router = APIRouter(tags=["Signup"])
+router = APIRouter()
 
 
 @router.post(

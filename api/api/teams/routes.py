@@ -51,21 +51,25 @@ async def create_team(
 )
 async def update_team(
     current_user: Annotated[User, Depends(get_admin_user)],
+    t_id: Annotated[str, ...],
     body: Annotated[TeamUpdateScema, ...],
 ):
-    return current_user.username
+    return await teams_controller.update_team(body=body, t_id=t_id)
 
 
 @router.delete(
     "/delete/{t_id}/",
     summary="authenticated user can join  on tams",
 )
-async def delete_team(current_user: Annotated[User, Depends(get_admin_user)]):
-    return {"message": "ok"}
+async def delete_team(
+    current_user: Annotated[User, Depends(get_admin_user)],
+    t_id: Annotated[str, ...],
+):
+    return await teams_controller.delete_team(t_id=t_id)
 
 
 @router.post(
     "/join/", response_model=None, summary="authenticated user can join  on tams"
 )
 async def join_on_team(current_user: Annotated[User, Depends(get_current_user)]):
-    return current_user.username
+    pass
