@@ -1,9 +1,10 @@
 from enum import IntEnum, EJECT
 from typing import Annotated
 from jose import JWTError, jwt
+from bson import ObjectId
 from fastapi.security import OAuth2PasswordBearer
 from fastapi import Depends, HTTPException, status
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 from core.config.jwt import JwtConfig
 from database.connection import users_collection
 
@@ -14,13 +15,18 @@ class UserRole(IntEnum):
 
 
 class User(BaseModel):
+    id: ObjectId = Field(validation_alias="_id")
     age: int
     name: str
     username: str
     last_name: str
     email: str
     role: UserRole
-    model_config = ConfigDict()
+    model_config = ConfigDict(
+        arbitrary_types_allowed=True,
+        populate_by_name=True,
+        json_encoders={ObjectId: str},
+    )
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")

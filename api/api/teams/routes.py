@@ -1,8 +1,14 @@
 from typing import Annotated
-from core.security.auth import User, get_current_user, get_admin_user
+from bson import ObjectId
 from fastapi import APIRouter, Depends
+from core.security.auth import User, get_current_user, get_admin_user
 from .controller import TeamsController as teams_controller
-from .schema import TeamCreateSchema, TeamResponseSchema, TeamUpdateScema
+from .schema import (
+    TeamCreateSchema,
+    TeamResponseSchema,
+    TeamUpdateScema,
+    TeamListResponseSchema,
+)
 
 
 router = APIRouter(prefix="/teams", tags=["Teams"])
@@ -11,21 +17,20 @@ router = APIRouter(prefix="/teams", tags=["Teams"])
 @router.get(
     "/get/{t_id}/",
     response_model=TeamResponseSchema,
-    summary="authenticated user can join  on tams",
+    summary="authenticated user can get information of a",
 )
 async def get_team(
-    current_user: Annotated[User, Depends(get_current_user)], t_id: Annotated[str, ...]
+    t_id: Annotated[str, ...],
 ):
     return await teams_controller.get_team(t_id)
 
 
 @router.get(
     "/list/",
-    response_model=list[TeamResponseSchema],
-    summary="authenticated user can join  on tams",
+    response_model=list[TeamListResponseSchema],
+    summary="authenticated user can get list of teams",
 )
 async def get_teams(
-    current_user: Annotated[User, Depends(get_current_user)],
     skip: int = 0,
     limit: int = 100,
 ):
@@ -35,7 +40,7 @@ async def get_teams(
 @router.post(
     "/create/",
     response_model=TeamResponseSchema,
-    summary="authenticated user can join  on tams",
+    summary="admin user can create teams",
 )
 async def create_team(
     current_user: Annotated[User, Depends(get_admin_user)],
@@ -47,7 +52,7 @@ async def create_team(
 @router.put(
     "/update/{t_id}/",
     response_model=TeamResponseSchema,
-    summary="authenticated user can join  on tams",
+    summary="admin user can update teams",
 )
 async def update_team(
     current_user: Annotated[User, Depends(get_admin_user)],
@@ -59,7 +64,7 @@ async def update_team(
 
 @router.delete(
     "/delete/{t_id}/",
-    summary="authenticated user can join  on tams",
+    summary="admin user can delete teams",
 )
 async def delete_team(
     current_user: Annotated[User, Depends(get_admin_user)],
@@ -69,7 +74,9 @@ async def delete_team(
 
 
 @router.post(
-    "/join/", response_model=None, summary="authenticated user can join  on tams"
+    "{t_id}/join/", response_model=None, summary="authenticated user can join  on tams"
 )
-async def join_on_team(current_user: Annotated[User, Depends(get_current_user)]):
-    pass
+async def join_on_team(
+    current_user: Annotated[User, Depends(get_current_user)], t_id: Annotated[str, ...]
+):
+    return await teams_controller.join_on_team(t_id, current_user)

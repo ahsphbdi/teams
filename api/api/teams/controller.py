@@ -1,8 +1,8 @@
 from bson import ObjectId
 from fastapi.exceptions import HTTPException
-from database.connection import teams_collection
+from database.connection import teams_collection, users_collection
+from core.security.auth import User
 from .schema import TeamCreateSchema, TeamUpdateScema
-from pymongo.results import DeleteResult
 
 
 class TeamsController:
@@ -47,5 +47,13 @@ class TeamsController:
         return {"message": "ok"}
 
     @staticmethod
-    async def join_on_team(t_id: str):
-        pass
+    async def join_on_team(t_id: str, current_user: User):
+        result = await teams_collection.update_one(
+            {"_id": ObjectId(t_id)}, {"$push": {"members": ObjectId(current_user.id)}}
+        )
+        if result.modified_count == 1:
+            return {"message": "member added to team"}
+        elif result.modified_count >= 1:
+            raise HTTPException(status_code=500, detail="error acured")
+        elif result.modified_count >= 1:
+            raise HTTPException(status_code=404, detail="not found")

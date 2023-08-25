@@ -11,3 +11,13 @@ class TeamResponseSchema(BaseModel):
         populate_by_name=True,
         json_encoders={ObjectId: str},
     )
+
+
+class TeamListResponseSchema(BaseModel):
+    id: ObjectId = Field(validation_alias="_id")
+    title: str
+    model_config = ConfigDict(
+        arbitrary_types_allowed=True,
+        populate_by_name=True,
+        json_encoders={ObjectId: str},
+    )
